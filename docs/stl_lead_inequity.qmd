@@ -4,23 +4,62 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+library(tidyverse)
+library(janitor)
+library(here)
+library(skimr)
+library(dplyr)
 ```
 
-You can add options to executable code like this
-
 ```{r}
-#| echo: false
-2 * 2
+stl_lead <- read_csv(here::here("data",
+                                "stl_blood_lead.csv")) %>% 
+  clean_names()
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+skim(stl_lead)
+```
+
+```{r}
+stl_lead_prop <- stl_lead %>% 
+  dplyr::mutate(prop_white = (white / total_pop)*100)
+```
+
+```{r}
+stl_lead_plot <- ggplot(data = stl_lead_prop,
+                        aes(x = pct_elevated, 
+                            y = prop_white)) +
+  geom_point(color = "orange", alpha = 0.8) +
+  labs(x = "Percent Elevated", y = "Percent White")
+
+stl_lead_plot
+```
+
+```{r}
+ggsave(plot = stl_lead_plot,
+       here("figs",
+            "stl_lead_plot.png"),
+       width = 6,
+       height = 5)
+```
+
+As the percent of white people in each census tract decreases, the percent of elevated blood pressure increases.
+
+```{r}
+stl_lead_histogram <- ggplot(data = stl_lead_prop,
+       aes(x = pct_elevated)) +
+  geom_histogram(color = "black", fill = "blue")
+
+stl_lead_histogram
+
+```
+
+```{r}
+ggsave(plot = stl_lead_histogram,
+      here("figs", "stl_lead_histogram.jpg"),
+       width = 8,
+       height = 8,
+       dpi = 200)
+```
