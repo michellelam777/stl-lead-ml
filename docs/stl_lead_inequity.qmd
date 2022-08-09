@@ -10,6 +10,7 @@ library(janitor)
 library(here)
 library(skimr)
 library(dplyr)
+library(stringr)
 ```
 
 ```{r}
@@ -32,10 +33,16 @@ stl_lead_plot <- ggplot(data = stl_lead_prop,
                         aes(x = pct_elevated, 
                             y = prop_white)) +
   geom_point(color = "violetred3", alpha = 0.8) +
-  labs(x = "Percent Elevated", y = "Percent White", title = "Pecent Elevated Blood Lead Levels vs. Percent White")
+  labs(x = "Percent Elevated", 
+       y = "Percent White", 
+       title = "Pecent Elevated Blood Lead Levels vs. Percent White", 
+       caption = "Negative correlation between percent elevated blood lead and percent white.") +
+  geom_smooth(method = lm, se = FALSE)
 
 stl_lead_plot
 ```
+
+As the percent of white people in each census tract decreases, the percent of people with elevated blood lead levels increases.
 
 ```{r}
 ggsave(plot = stl_lead_plot,
@@ -44,8 +51,6 @@ ggsave(plot = stl_lead_plot,
        width = 6,
        height = 5)
 ```
-
-As the percent of white people in each census tract decreases, the percent of people with elevated blood lead levels increases.
 
 ```{r}
 stl_lead_histogram <- ggplot(data = stl_lead_prop,
