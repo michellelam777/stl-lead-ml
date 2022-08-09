@@ -31,8 +31,8 @@ stl_lead_prop <- stl_lead %>%
 stl_lead_plot <- ggplot(data = stl_lead_prop,
                         aes(x = pct_elevated, 
                             y = prop_white)) +
-  geom_point(color = "orange", alpha = 0.8) +
-  labs(x = "Percent Elevated", y = "Percent White")
+  geom_point(color = "violetred3", alpha = 0.8) +
+  labs(x = "Percent Elevated", y = "Percent White", title = "Pecent Elevated Blood Lead Levels vs. Percent White")
 
 stl_lead_plot
 ```
@@ -45,12 +45,13 @@ ggsave(plot = stl_lead_plot,
        height = 5)
 ```
 
-As the percent of white people in each census tract decreases, the percent of elevated blood pressure increases.
+As the percent of white people in each census tract decreases, the percent of people with elevated blood lead levels increases.
 
 ```{r}
 stl_lead_histogram <- ggplot(data = stl_lead_prop,
        aes(x = pct_elevated)) +
-  geom_histogram(color = "black", fill = "blue")
+  geom_histogram(color = "black", fill = "lemonchiffon2") +
+  labs(x = "Percent Elevated Blood Lead")
 
 stl_lead_histogram
 
